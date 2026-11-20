@@ -208,7 +208,9 @@ document.addEventListener('click',e=>{
  const day=e.target.closest('[data-day]');if(day){sel=day.dataset.day;renderUpcoming();return}
  const ad=e.target.closest('[data-add]');if(ad){setAddDate(ad.dataset.add);$('q').focus();return}
  const rs=e.target.closest('[data-restore]');if(rs){const i=db.deleted.findIndex(t=>t.id==rs.dataset.restore);if(i>=0){const[t]=db.deleted.splice(i,1);delete t.deletedAt;db.tasks.push(t);save();render();toast('Restored to '+dayLabel(t.date))}return}
- const tb=e.target.closest('[data-tab]');if(tb){const n=tb.dataset.tab;if(n=='today')solo=false;tab=n;closeSheet();render();const v=$('v-'+n);if(v)v.scrollTop=0}});
+ const tb=e.target.closest('[data-tab]');if(tb){const n=tb.dataset.tab;
+  /* inner screen: Today button slides the Today side in and out */
+  if(n=='today')solo=wideMq.matches&&(tab=='today'||tab=='upcoming')?!solo:false;tab=n;closeSheet();render();const v=$('v-'+n);if(v)v.scrollTop=0}});
 $('sw').onclick=()=>{solo=!solo;render()};
 
 /* ---------- input bar ---------- */
@@ -221,15 +223,21 @@ $('inp').addEventListener('submit',e=>{e.preventDefault();const v=$('q').value.t
  add(v);$('q').value='';syncGo();$('q').blur()});
 
 /* ---------- layout + tab bar ---------- */
+/* soft foggy fade when the tab changes (screens only — buttons never animate) */
+const calm=matchMedia('(prefers-reduced-motion: reduce)');let shownTab=tab;
+function fog(){if(tab==shownTab)return;const was=shownTab;shownTab=tab;
+ const inSplit=n=>n=='today'||n=='upcoming';if(wideMq.matches&&inSplit(was)&&inSplit(tab))return;
+ const el=inSplit(tab)?(wideMq.matches?$('split'):$('v-'+tab)):$('v-'+tab);if(!el.animate||calm.matches)return;
+ el.animate([{opacity:0,filter:'blur(10px)'},{opacity:1,filter:'blur(0)'}],{duration:280,easing:'cubic-bezier(.2,.6,.3,1)'})}
 function render(){
  const wide=wideMq.matches,inSplit=tab=='today'||tab=='upcoming';
  $('split').classList.toggle('on',inSplit);$('split').classList.toggle('solo',wide&&solo);
  $('v-today').classList.toggle('on',tab=='today');$('v-upcoming').classList.toggle('on',tab=='upcoming');
  $('v-notes').classList.toggle('on',tab=='notes');$('v-me').classList.toggle('on',tab=='me');
  $('sw').innerHTML=icon(solo?'layout-sidebar-left-expand':'layout-sidebar-left-collapse');
- const lit=n=>n==tab||(wide&&inSplit&&n=='today'&&!solo)||(wide&&inSplit&&n=='upcoming');
+ const lit=n=>wide&&inSplit?(n=='upcoming'||(n=='today'&&!solo)):n==tab;
  $('tb').innerHTML=[['today','sun','Today'],['upcoming','calendar','Upcoming'],['notes','notes','Notes'],['me','user','Me']].map(([n,i,l])=>`<button data-tab="${n}" class="${lit(n)?'on':''}">${icon(i)}${l}</button>`).join('');
- openRow=null;renderToday();renderUpcoming();renderNotes();renderMe()}
+ openRow=null;renderToday();renderUpcoming();renderNotes();renderMe();fog()}
 wideMq.addEventListener('change',render);
 
 /* keep "next is … in 1h 20m" and the date fresh */
