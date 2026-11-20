@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Selah</title>
+<meta name="theme-color" content="#F5F3EE">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Selah">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div id="app">
+  <main id="views">
+    <div class="split" id="split">
+      <section class="view" id="v-today"></section>
+      <section class="view" id="v-upcoming"></section>
+    </div>
+    <section class="view" id="v-notes"></section>
+    <section class="view" id="v-me"></section>
+    <button class="sw" id="sw" aria-label="Slide Today out or back in"></button>
+  </main>
+  <footer class="dock">
+    <form class="inp" id="inp" autocomplete="off">
+      <span class="chip" id="chip" hidden></span>
+      <input id="q" type="text" placeholder="Say or type anything…" enterkeyhint="done" autocapitalize="sentences">
+      <button type="submit" class="go" id="go" aria-label="Add"></button>
+    </form>
+    <nav class="tb" id="tb"></nav>
+  </footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="sheet-bg" id="sheet-bg" hidden></div>
+<div class="sheet" id="sheet" hidden></div>
+<script src="icons.js"></script>
+<script src="verses.js"></script>
+<script src="parse.js"></script>
+<script src="app.js"></script>
+</body></html>
