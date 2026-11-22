@@ -1,6 +1,6 @@
 /* Keeps Selah working offline: every app file is saved on the phone at install.
    Bump VERSION whenever an app file changes so phones pick up the new files. */
-const VERSION='selah-v1.0.1';
+const VERSION='selah-v1.0.2';
 const FILES=['./','index.html','style.css','app.js','parse.js','icons.js','verses.js','manifest.webmanifest',
  'icon-180.png','icon-192.png','icon-512.png','fonts/fonts.css',
  'fonts/Manrope-normal-latin.woff2','fonts/Manrope-normal-latin-ext.woff2',
